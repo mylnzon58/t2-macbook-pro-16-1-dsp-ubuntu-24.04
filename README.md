@@ -3,12 +3,27 @@
 [![Ubuntu 24.04 LTS](https://img.shields.io/badge/Ubuntu-24.04_LTS_(Noble)-E95420?logo=ubuntu&logoColor=white)](#)
 [![PipeWire 1.0.7](https://img.shields.io/badge/PipeWire-1.0.7_(LV2_Enabled)-00B4D8?logo=linux&logoColor=white)](#)
 [![Hardware](https://img.shields.io/badge/Apple_T2-MacBookPro16%2C1_(A2141)-111827?logo=apple&logoColor=white)](#)
-[![Author](https://img.shields.io/badge/Author-mylnzon58_(mylnzon58%40gmail.com)-10B981?logo=github&logoColor=white)](https://github.com/mylnzon58)
+[![Author](https://img.shields.io/badge/Author-Juan_Monz%C3%B3n_(@mylnzon58)-10B981?logo=github&logoColor=white)](https://github.com/mylnzon58)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Juan_Monz%C3%B3n-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juan-m-97b85681/)
+[![Instagram](https://img.shields.io/badge/Instagram-%40juanjoclassic-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/juanjoclassic/)
+[![Invitame un Tecito](https://img.shields.io/badge/%E2%98%95_Donar_un_Tecito-tecito.app%2Fjuanjoclassic-FF813F?style=flat&logo=buy-me-a-coffee&logoColor=white)](https://tecito.app/juanjoclassic)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-> **Author & Maintainer:** **[@mylnzon58](https://github.com/mylnzon58)** (`mylnzon58@gmail.com`)  
-> Si esta solución reparó el sonido de tu MacBook Pro 16" en Ubuntu 24.04, **dale una estrella (Star) al repositorio y sígueme en GitHub ([@mylnzon58](https://github.com/mylnzon58))**.  
-> If this fixed your MacBook Pro 16" audio on Ubuntu 24.04, **please Star this repo and Follow [@mylnzon58](https://github.com/mylnzon58) on GitHub**.
+> **Author & Maintainer:** **[Juan Monzón (@mylnzon58)](https://www.linkedin.com/in/juan-m-97b85681/)** — *AI Product | Full Stack Developer | Digital Products & Growth* (Argentina)  
+> ☕ **¿Te sirvió esta solución?** Si este parche te ahorró horas de debugging y devolvió a la vida los 6 parlantes de tu MacBook Pro en Ubuntu 24.04, puedes agradecer o apoyar estas soluciones invitándome un Tecito en **[tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**, dejando una **Star ⭐** en el repo y siguiéndome en **[GitHub](https://github.com/mylnzon58)**, **[LinkedIn](https://www.linkedin.com/in/juan-m-97b85681/)** e **[Instagram (@juanjoclassic)](https://www.instagram.com/juanjoclassic/)**.  
+> ☕ **Did this fix save your day?** If this solution brought your 16" MacBook Pro speakers back to life on Ubuntu 24.04, feel free to support my open-source work by buying me a Tecito at **[tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**, **Starring ⭐** this repository, and connecting on **[LinkedIn](https://www.linkedin.com/in/juan-m-97b85681/)**.
+
+<p align="left">
+  <a href="https://tecito.app/juanjoclassic" target="_blank">
+    <img src="https://img.shields.io/badge/%E2%98%95_Invitame_un_Tecito_/_Donate-tecito.app%2Fjuanjoclassic-FF813F?style=for-the-badge&logoColor=white" alt="Donar un Tecito - tecito.app/juanjoclassic" />
+  </a>
+  <a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-Juan_Monz%C3%B3n-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn - Juan Monzón" />
+  </a>
+  <a href="https://www.instagram.com/juanjoclassic/" target="_blank">
+    <img src="https://img.shields.io/badge/Instagram-%40juanjoclassic-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram - @juanjoclassic" />
+  </a>
+</p>
 
 **[Español](#-español--solución-dsp-para-macbook-pro-161-en-ubuntu-2404-lts)** | **[English](#-english--macbook-pro-161-dsp-speaker-fix-for-ubuntu-2404-lts)**
 
@@ -164,10 +179,28 @@ To revert to stock raw audio at any time:
 
 ---
 
+### ☕ Apoya estas Soluciones / Support & Donate a Tecito
+
+Si este proyecto te ayudó a recuperar el sonido original de tu MacBook Pro 16" en Linux o te ahorró horas lidiando con PipeWire y LV2, te invito a apoyar mi trabajo con un **Tecito** para seguir publicando soluciones open-source:
+
+If this solution helped restore your MacBook Pro's 6-speaker audio on Linux and saved you hours of debugging, consider supporting my open-source work by donating a **Tecito**:
+
+👉 **[☕ Donar un Tecito en tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**
+
+[![Donar un Tecito](https://img.shields.io/badge/%E2%98%95_Donar_un_Tecito-https%3A%2F%2Ftecito.app%2Fjuanjoclassic-FF813F?style=for-the-badge&logoColor=white)](https://tecito.app/juanjoclassic)
+
+---
+
 ### Créditos y Autoría / Credits & Authorship
 
-- **Investigación de puertos LV2, parche para Ubuntu 24.04 LTS & PipeWire 1.0.7, automatización y documentación:**  
-  **[@mylnzon58](https://github.com/mylnzon58)** — Contacto: `mylnzon58@gmail.com`
+- **Autor e Investigación (LV2 ports patch, Ubuntu 24.04 LTS & PipeWire 1.0.7 integration, automation & docs):**  
+  **[Juan Monzón (@mylnzon58)](https://www.linkedin.com/in/juan-m-97b85681/)**  
+  *AI Product | Full Stack Developer | Digital Products & Growth*  
+  📍 Argentina  
+  - 🔗 **LinkedIn:** [linkedin.com/in/juan-m-97b85681](https://www.linkedin.com/in/juan-m-97b85681/)
+  - 📸 **Instagram:** [@juanjoclassic](https://www.instagram.com/juanjoclassic/)
+  - ☕ **Donar un Tecito:** [tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)
+  - 💻 **GitHub:** [@mylnzon58](https://github.com/mylnzon58) (`mylnzon58@gmail.com`)
 - **Respuestas impulsionales FIR originales (`macbook_pro_t2_16_1_*.wav`) y topología base T2:**  
   Proyecto comunitario [T2 Linux](https://t2linux.org) / `lemmyg/t2-apple-audio-dsp` (Licencia MIT).
 

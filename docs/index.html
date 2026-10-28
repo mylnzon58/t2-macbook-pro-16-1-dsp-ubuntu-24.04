@@ -28,9 +28,20 @@
         "description": "Technical documentation and PipeWire 1.0.7 filter-chain LV2 patch for Apple T2 MacBookPro16,1 6-channel internal speakers on Ubuntu 24.04 LTS (Noble Numbat).",
         "author": {
           "@type": "Person",
-          "name": "mylnzon58",
+          "name": "Juan Monzón (mylnzon58)",
+          "jobTitle": "AI Product | Full Stack Developer | Digital Products & Growth",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "AR"
+          },
           "email": "mylnzon58@gmail.com",
-          "url": "https://github.com/mylnzon58"
+          "url": "https://www.linkedin.com/in/juan-m-97b85681/",
+          "sameAs": [
+            "https://github.com/mylnzon58",
+            "https://www.linkedin.com/in/juan-m-97b85681/",
+            "https://www.instagram.com/juanjoclassic/",
+            "https://tecito.app/juanjoclassic"
+          ]
         },
         "datePublished": "2026-10-28",
         "inLanguage": ["es", "en"]
@@ -170,6 +181,74 @@
     .gh-link:hover {
       border-color: var(--text-muted);
       text-decoration: none;
+    }
+    .tecito-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+      background: var(--ubuntu-orange);
+      border: 1px solid #ff7a47;
+      padding: 3px 11px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      transition: filter 0.15s ease;
+    }
+    .tecito-btn:hover {
+      filter: brightness(1.12);
+      text-decoration: none;
+    }
+    .support-card {
+      background: linear-gradient(180deg, #231c19 0%, var(--bg-panel) 100%);
+      border: 1px solid #5a3222;
+      border-left: 4px solid var(--ubuntu-orange);
+      padding: 18px 20px;
+      margin: 22px 0;
+    }
+    .support-card h3 {
+      margin-top: 0;
+      color: #ffffff;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      color: #ffffff;
+      background: var(--bg-headerbar);
+    }
+    .btn-cta:hover {
+      text-decoration: none;
+      border-color: var(--text-muted);
+    }
+    .btn-cta.primary {
+      background: var(--ubuntu-orange);
+      border-color: #ff7a47;
+      color: #ffffff;
+    }
+    .btn-cta.primary:hover {
+      filter: brightness(1.12);
+    }
+    .btn-cta.linkedin {
+      background: #0a66c2;
+      border-color: #2b82d9;
+    }
+    .btn-cta.instagram {
+      background: #c13584;
+      border-color: #e1306c;
     }
 
     /* Main 2-Column Documentation Layout */
@@ -472,6 +551,9 @@
           <button type="button" id="btn-en" onclick="setLang('en')">EN</button>
           <button type="button" id="btn-both" onclick="setLang('both')">ES/EN</button>
         </div>
+        <a class="tecito-btn" href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener" title="Invitame un Tecito / Donate">
+          <span>☕ Donar un Tecito</span>
+        </a>
         <a class="gh-link" href="https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04" target="_blank" rel="noopener">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
           <span>mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04</span>
@@ -491,7 +573,7 @@
         <li><a href="#patch">4. CONFIG PATCH (DIFF)</a></li>
         <li><a href="#install">5. INSTALLATION</a></li>
         <li><a href="#verification">6. VERIFICATION</a></li>
-        <li><a href="#maintainer">7. MAINTAINER</a></li>
+        <li><a href="#maintainer">7. AUTHOR &amp; DONATE</a></li>
       </ul>
 
       <dl class="meta-box">
@@ -501,8 +583,21 @@
         <dd>Ubuntu 24.04 LTS (Noble) amd64</dd>
         <dt>Audio Stack</dt>
         <dd>PipeWire 1.0.7<br/>WirePlumber 0.4.17</dd>
-        <dt>Maintainer</dt>
-        <dd><a href="https://github.com/mylnzon58" target="_blank" rel="noopener">@mylnzon58</a><br/><a href="mailto:mylnzon58@gmail.com">mylnzon58@gmail.com</a></dd>
+        <dt>Author</dt>
+        <dd>
+          <strong><a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">Juan Monzón</a></strong><br/>
+          <span style="color:var(--text-muted);font-size:11.5px;">AI Product | Full Stack Developer | Digital Products &amp; Growth</span><br/>
+          <span style="color:var(--text-dim);font-size:11px;">Argentina</span>
+        </dd>
+        <dt>Links &amp; Social</dt>
+        <dd>
+          <a href="https://github.com/mylnzon58" target="_blank" rel="noopener">GitHub @mylnzon58</a><br/>
+          <a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">LinkedIn</a> &middot; <a href="https://www.instagram.com/juanjoclassic/" target="_blank" rel="noopener">IG @juanjoclassic</a>
+        </dd>
+        <dt>Support / Donar</dt>
+        <dd style="margin-top:4px;">
+          <a class="tecito-btn" style="width:100%;justify-content:center;" href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">☕ Invitame un Tecito</a>
+        </dd>
         <dt>License</dt>
         <dd>MIT</dd>
       </dl>
@@ -795,17 +890,63 @@ LW1  LW2   Left Tweeter         RW1  RW2   Right Tweeter</code></pre>
              <span class="ok">58. output_AUX5     &gt; Speaker:playback_RR	[active]</span></code></pre>
       </div>
 
-      <!-- 7. MAINTAINER -->
-      <h2 id="maintainer">7. AUTHOR &amp; MAINTAINER</h2>
+      <!-- 7. MAINTAINER & SUPPORT -->
+      <h2 id="maintainer">7. AUTHOR, MAINTAINER &amp; SUPPORT (DONAR UN TECITO)</h2>
+
+      <div class="support-card">
+        <div data-i18n="es">
+          <h3>☕ ¿Te sirvió esta solución? Invitame un Tecito</h3>
+          <p>
+            Si este diagnóstico y parche de PipeWire + LV2 te ahorró horas de trabajo y devolvió a la vida los 6 parlantes de tu MacBook Pro 16" en Ubuntu 24.04, puedes apoyar estas soluciones open-source invitándome un <strong>Tecito</strong> o conectando conmigo en mis redes:
+          </p>
+        </div>
+        <div data-i18n="en">
+          <h3>☕ Did this solution help you? Buy me a Tecito</h3>
+          <p>
+            If this PipeWire + LV2 root-cause analysis and patch saved you hours of debugging and brought your 16" MacBook Pro's 6 speakers back to life on Ubuntu 24.04, consider supporting my open-source solutions by donating a <strong>Tecito</strong> or connecting with me:
+          </p>
+        </div>
+        <div class="cta-row">
+          <a class="btn-cta primary" href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">
+            <span>☕ Donar un Tecito (tecito.app/juanjoclassic)</span>
+          </a>
+          <a class="btn-cta linkedin" href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">
+            <span>in LinkedIn — Juan Monzón</span>
+          </a>
+          <a class="btn-cta instagram" href="https://www.instagram.com/juanjoclassic/" target="_blank" rel="noopener">
+            <span>📸 Instagram @juanjoclassic</span>
+          </a>
+          <a class="btn-cta" href="https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04" target="_blank" rel="noopener">
+            <span>⭐ Star on GitHub (@mylnzon58)</span>
+          </a>
+        </div>
+      </div>
+
       <table>
         <tbody>
           <tr>
-            <th style="width:180px;">Maintainer</th>
-            <td><strong>mylnzon58</strong> — <a href="mailto:mylnzon58@gmail.com">mylnzon58@gmail.com</a></td>
+            <th style="width:180px;">Author &amp; Maintainer</th>
+            <td>
+              <strong><a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">Juan Monzón</a></strong> (<code>@mylnzon58</code>)<br/>
+              <em>AI Product | Full Stack Developer | Digital Products &amp; Growth</em><br/>
+              📍 Argentina
+            </td>
+          </tr>
+          <tr>
+            <th>Support / Donaciones</th>
+            <td><a href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener"><strong>https://tecito.app/juanjoclassic</strong></a> (☕ Invitame un Tecito por las soluciones)</td>
+          </tr>
+          <tr>
+            <th>LinkedIn</th>
+            <td><a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">https://www.linkedin.com/in/juan-m-97b85681/</a></td>
+          </tr>
+          <tr>
+            <th>Instagram</th>
+            <td><a href="https://www.instagram.com/juanjoclassic/" target="_blank" rel="noopener">@juanjoclassic (https://www.instagram.com/juanjoclassic/)</a></td>
           </tr>
           <tr>
             <th>GitHub Profile</th>
-            <td><a href="https://github.com/mylnzon58" target="_blank" rel="noopener">https://github.com/mylnzon58</a></td>
+            <td><a href="https://github.com/mylnzon58" target="_blank" rel="noopener">https://github.com/mylnzon58</a> — <a href="mailto:mylnzon58@gmail.com">mylnzon58@gmail.com</a></td>
           </tr>
           <tr>
             <th>Source Repository</th>
@@ -820,7 +961,7 @@ LW1  LW2   Left Tweeter         RW1  RW2   Right Tweeter</code></pre>
 
       <footer>
         <span>PIPEWIRE-T2-161-DSP(5) — Ubuntu 24.04 LTS (Noble Numbat)</span>
-        <span>Maintained by <a href="https://github.com/mylnzon58" target="_blank" rel="noopener">@mylnzon58</a> (mylnzon58@gmail.com)</span>
+        <span>By <a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">Juan Monzón (@mylnzon58)</a> &middot; <a href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">☕ Donar un Tecito</a> &middot; <a href="https://www.instagram.com/juanjoclassic/" target="_blank" rel="noopener">IG @juanjoclassic</a></span>
       </footer>
     </main>
   </div>
