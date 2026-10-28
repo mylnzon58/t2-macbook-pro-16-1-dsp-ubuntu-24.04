@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>T2-DSP(5) — MacBookPro16,1 (A2141) PipeWire 1.0.7 Audio DSP on Ubuntu 24.04 LTS</title>
+  <meta name="description" content="Documentación técnica y parche de PipeWire 1.0.7 (libpipewire-module-filter-chain) para el sistema de 6 altavoces del MacBook Pro 16,1 (2019, A2141) con chip Apple T2 en Ubuntu 24.04 LTS. Por mylnzon58 (mylnzon58@gmail.com)." />
+  <meta name="keywords" content="MacBookPro16,1 Ubuntu 24.04 audio fix, MacBook Pro 16 2019 A2141 speakers Linux DSP, t2-apple-audio-dsp Ubuntu 24.04, mod.filter-chain can't load plugin type lv2, libspa-filter-graph-plugin-lv2.so Ubuntu 24.04, libpipewire-module-filter-chain-lv2.so, mod.filter-chain control bypass can not be set, mod.filter-chain control cbe_0 can not be set, reparar parlantes MacBook Pro 16 2019 Ubuntu 24.04, Apple T2 6 channel speakers PipeWire 1.0.7, mylnzon58" />
+  <meta name="author" content="mylnzon58 (mylnzon58@gmail.com)" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MacBookPro16,1 (A2141) PipeWire 1.0.7 Speaker DSP — Ubuntu 24.04 LTS" />
+  <meta property="og:description" content="Root cause analysis and PipeWire 1.0.7 LV2 filter-chain configuration for 2019 16-inch MacBook Pro (MacBookPro16,1) 6-channel speakers on Ubuntu 24.04 LTS." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "headline": "MacBookPro16,1 (2019, A2141) 6-Channel Speaker DSP on Ubuntu 24.04 LTS (PipeWire 1.0.7)",
+        "alternativeHeadline": "Reparar DSP de parlantes internos en MacBook Pro 16,1 (2019) con Ubuntu 24.04 LTS y PipeWire 1.0.7",
+        "description": "Technical documentation and PipeWire 1.0.7 filter-chain LV2 patch for Apple T2 MacBookPro16,1 6-channel internal speakers on Ubuntu 24.04 LTS (Noble Numbat).",
+        "author": {
+          "@type": "Person",
+          "name": "mylnzon58",
+          "email": "mylnzon58@gmail.com",
+          "url": "https://github.com/mylnzon58"
+        },
+        "datePublished": "2026-10-28",
+        "inLanguage": ["es", "en"]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "t2-macbook-pro-16-1-dsp-ubuntu-24.04",
+        "codeRepository": "https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04",
+        "runtimePlatform": "Ubuntu 24.04 LTS (amd64) / PipeWire 1.0.7",
+        "license": "https://opensource.org/licenses/MIT",
+        "author": {
+          "@type": "Person",
+          "name": "mylnzon58",
+          "email": "mylnzon58@gmail.com",
+          "url": "https://github.com/mylnzon58"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* Ubuntu Vanilla Framework + GNOME Libadwaita Dark Technical Style */
+    :root {
+      --bg-window: #161616;
+      --bg-panel: #1e1e1e;
+      --bg-headerbar: #262626;
+      --bg-code: #111111;
+      --border: #303030;
+      --border-subtle: #252525;
+      --text-main: #e0e0e0;
+      --text-muted: #9a9a9a;
+      --text-dim: #6e6e6e;
+      --ubuntu-orange: #e95420;
+      --link-blue: #62a0ea;
+      --ansi-green: #8ff0a4;
+      --ansi-red: #f66151;
+      --ansi-yellow: #f9f06b;
+      --font-ui: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Liberation Sans', sans-serif;
+      --font-mono: 'Ubuntu Mono', 'Liberation Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-window);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      line-height: 1.6;
+      border-top: 3px solid var(--ubuntu-orange);
+    }
+
+    a {
+      color: var(--link-blue);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* GTK / Vanilla Top Headerbar */
+    .top-bar {
+      background-color: var(--bg-headerbar);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .top-bar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .breadcrumb strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .lang-toggle {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      background: var(--bg-window);
+    }
+    .lang-toggle button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      padding: 3px 9px;
+      cursor: pointer;
+    }
+    .lang-toggle button.active {
+      background: var(--bg-headerbar);
+      color: var(--text-main);
+      font-weight: 700;
+    }
+    .gh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-main);
+      background: var(--bg-window);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      font-size: 12.5px;
+    }
+    .gh-link:hover {
+      border-color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    /* Main 2-Column Documentation Layout */
+    .layout {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 64px;
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 36px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 16px !important;
+      }
+    }
+
+    /* Left Sidebar (Manpage / Docs Navigation) */
+    .sidebar {
+      position: sticky;
+      top: 70px;
+      border-right: 1px solid var(--border);
+      padding-right: 18px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .sidebar-title {
+      color: var(--text-muted);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .toc-list {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .toc-list li {
+      margin-bottom: 6px;
+    }
+    .toc-list a {
+      color: var(--text-muted);
+      display: block;
+      padding: 2px 0;
+    }
+    .toc-list a:hover {
+      color: var(--text-main);
+      text-decoration: none;
+    }
+    .meta-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      padding: 12px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .meta-box dt {
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+    .meta-box dt:first-child {
+      margin-top: 0;
+    }
+    .meta-box dd {
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    /* Document Content Column */
+    .doc-main {
+      min-width: 0;
+    }
+
+    /* Manpage Header Banner */
+    .man-header {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .lead {
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      font-size: 15px;
+    }
+
+    h2 {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+      margin: 34px 0 14px;
+    }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 18px 0 8px;
+    }
+
+    p {
+      margin-bottom: 12px;
+    }
+
+    ul, ol {
+      margin: 0 0 14px 22px;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      padding: 1px 5px;
+      color: #d8d8d8;
+    }
+
+    /* GTK / GNOME Terminal Frame */
+    .gtk-terminal {
+      border: 1px solid var(--border);
+      background-color: var(--bg-code);
+      margin: 14px 0 20px;
+    }
+    .gtk-headerbar {
+      background-color: var(--bg-headerbar);
+      border-bottom: 1px solid var(--border);
+      height: 32px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .gtk-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .gtk-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-copy {
+      background: var(--bg-window);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      padding: 2px 8px;
+      cursor: pointer;
+    }
+    .btn-copy:hover {
+      background: var(--border);
+    }
+    .gtk-win-btns {
+      display: inline-flex;
+      gap: 5px;
+      color: var(--text-dim);
+      font-size: 12px;
+      user-select: none;
+    }
+    .gtk-win-btns span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #323232;
+      border-radius: 50%;
+      line-height: 1;
+    }
+
+    pre {
+      padding: 14px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #d4d4d4;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .prompt { color: var(--ansi-green); user-select: none; }
+    .err { color: var(--ansi-red); }
+    .ok { color: var(--ansi-green); }
+    .warn { color: var(--ansi-yellow); }
+    .del { color: var(--ansi-red); }
+    .add { color: var(--ansi-green); }
+    .comment { color: var(--text-dim); }
+
+    /* Technical Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 13.5px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--bg-headerbar);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: #ffffff;
+    }
+    td {
+      color: var(--text-main);
+    }
+
+    /* Notice Box (Vanilla Framework style) */
+    .notice {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--ubuntu-orange);
+      padding: 12px 16px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 44px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    body[data-lang="es"] [data-i18n="en"] { display: none; }
+    body[data-lang="en"] [data-i18n="es"] { display: none; }
+  </style>
+</head>
+<body data-lang="es">
+
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="breadcrumb">
+        <span>ubuntu-24.04-lts</span>
+        <span>/</span>
+        <span>pipewire-1.0.7</span>
+        <span>/</span>
+        <strong>t2-macbook-pro-16-1-dsp</strong>
+      </div>
+      <div class="top-actions">
+        <div class="lang-toggle" role="group" aria-label="Language">
+          <button type="button" id="btn-es" class="active" onclick="setLang('es')">ES</button>
+          <button type="button" id="btn-en" onclick="setLang('en')">EN</button>
+          <button type="button" id="btn-both" onclick="setLang('both')">ES/EN</button>
+        </div>
+        <a class="gh-link" href="https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+          <span>mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Secciones / Index</div>
+      <ul class="toc-list">
+        <li><a href="#synopsis">1. SYNOPSIS</a></li>
+        <li><a href="#root-cause">2. ROOT CAUSE</a></li>
+        <li><a href="#topology">3. DSP TOPOLOGY</a></li>
+        <li><a href="#patch">4. CONFIG PATCH (DIFF)</a></li>
+        <li><a href="#install">5. INSTALLATION</a></li>
+        <li><a href="#verification">6. VERIFICATION</a></li>
+        <li><a href="#maintainer">7. MAINTAINER</a></li>
+      </ul>
+
+      <dl class="meta-box">
+        <dt>Hardware</dt>
+        <dd>MacBookPro16,1 (2019 16" A2141)<br/>Apple T2 Audio (PCI 106b:1803)</dd>
+        <dt>Target OS</dt>
+        <dd>Ubuntu 24.04 LTS (Noble) amd64</dd>
+        <dt>Audio Stack</dt>
+        <dd>PipeWire 1.0.7<br/>WirePlumber 0.4.17</dd>
+        <dt>Maintainer</dt>
+        <dd><a href="https://github.com/mylnzon58" target="_blank" rel="noopener">@mylnzon58</a><br/><a href="mailto:mylnzon58@gmail.com">mylnzon58@gmail.com</a></dd>
+        <dt>License</dt>
+        <dd>MIT</dd>
+      </dl>
+    </aside>
+
+    <!-- Main Technical Content -->
+    <main class="doc-main">
+      <div class="man-header">
+        <span>PIPEWIRE-T2-161-DSP(5)</span>
+        <span>Linux Audio Configuration Manual</span>
+        <span>Ubuntu 24.04 LTS (amd64)</span>
+      </div>
+
+      <!-- Español Header -->
+      <div data-i18n="es">
+        <h1>Configuración DSP de 6 Canales para MacBook Pro 16,1 (2019, A2141) en Ubuntu 24.04 LTS</h1>
+        <p class="lead">
+          Parche y guía técnica para habilitar el grafo de filtros LV2, limitador LADSPA y convolución FIR de 6 canales (4 woofers con cancelación de fuerza + 2 tweeters) sobre PipeWire 1.0.7 y WirePlumber 0.4.17.
+        </p>
+      </div>
+
+      <!-- English Header -->
+      <div data-i18n="en">
+        <h1>6-Channel Speaker DSP Configuration for MacBook Pro 16,1 (2019, A2141) on Ubuntu 24.04 LTS</h1>
+        <p class="lead">
+          Technical root-cause analysis and patched PipeWire 1.0.7 filter-chain configuration enabling LV2 bass enhancement, multiband compression, LADSPA brickwall limiting, and 4x FIR convolution across all 6 internal speaker channels.
+        </p>
+      </div>
+
+      <!-- 1. SYNOPSIS -->
+      <h2 id="synopsis">1. SYNOPSIS</h2>
+      <div class="gtk-terminal">
+        <div class="gtk-headerbar">
+          <span class="gtk-title">bash — ~/t2-macbook-pro-16-1-dsp-ubuntu-24.04</span>
+          <div class="gtk-controls">
+            <button class="btn-copy" onclick="copyText('code-synopsis', this)">Copy</button>
+            <div class="gtk-win-btns" aria-hidden="true"><span>_</span><span>□</span><span>×</span></div>
+          </div>
+        </div>
+        <pre id="code-synopsis"><code><span class="prompt">$</span> git clone https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04.git
+<span class="prompt">$</span> cd t2-macbook-pro-16-1-dsp-ubuntu-24.04
+<span class="prompt">$</span> ./install.sh</code></pre>
+      </div>
+
+      <!-- 2. ROOT CAUSE -->
+      <h2 id="root-cause">2. ROOT CAUSE / DIAGNÓSTICO TÉCNICO</h2>
+
+      <div data-i18n="es">
+        <p>
+          Al instalar el paquete o la rama <code>speakers_161</code> de <code>t2-apple-audio-dsp</code> en <strong>Ubuntu 24.04 LTS (Noble Numbat)</strong>, el servicio de usuario de PipeWire falla o no aplica la cadena DSP debido a cuatro incompatibilidades concretas entre versiones:
+        </p>
+      </div>
+      <div data-i18n="en">
+        <p>
+          Deploying <code>t2-apple-audio-dsp</code> on <strong>Ubuntu 24.04 LTS (Noble Numbat)</strong> fails out of the box due to four version mismatches across PipeWire, WirePlumber, and the LV2 plugin descriptors:
+        </p>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Componente / Síntoma</th>
+            <th>Causa técnica en Ubuntu 24.04 LTS</th>
+            <th>Resolución aplicada</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>can't load plugin type 'lv2'</code></td>
+            <td>El paquete stock <code>pipewire 1.0.5-1ubuntu3</code> de Ubuntu 24.04 se compiló con <code>-Dlv2=disabled</code> (LP #2054223).</td>
+            <td>Actualizar a <code>pipewire 1.0.7-3~ubuntu24.04</code> desde <code>ppa:pipewire-debian/pipewire-upstream</code>.</td>
+          </tr>
+          <tr>
+            <td><code>libspa-filter-graph-plugin-lv2.so</code> no existe</td>
+            <td>Ese nombre pertenece a la arquitectura SPA de PipeWire &ge; 1.2. En PipeWire 1.0.x el módulo tiene otro nombre y ruta.</td>
+            <td>Verificar presencia de <code>/usr/lib/x86_64-linux-gnu/pipewire-0.3/libpipewire-module-filter-chain-lv2.so</code>.</td>
+          </tr>
+          <tr>
+            <td>Rama <code>master</code> de <code>t2-apple-audio-dsp</code> inoperante</td>
+            <td><code>master</code> usa <code>node.software-dsp</code> de WirePlumber 0.5+ (Ubuntu 25.10/26.04). Ubuntu 24.04 incluye WirePlumber 0.4.17 (Lua).</td>
+            <td>Usar arquitectura <code>libpipewire-module-filter-chain</code> en <code>~/.config/pipewire/pipewire.conf.d/</code>.</td>
+          </tr>
+          <tr>
+            <td><code>control 'meter_in' / 'bypass' / 'cbe_0' can not be set</code></td>
+            <td>
+              En <code>calf-plugins 0.90.3</code>, <code>meter_in</code>, <code>meter_out</code>, <code>clip_in</code>, <code>clip_out</code> son <code>lv2:OutputPort</code> (solo lectura).<br/>
+              En <code>lsp-plugins-lv2 1.2.14</code>, <code>bypass</code> fue sustituido por <code>enabled = 1</code> y la banda 0 no tiene puerto <code>cbe_0</code>.
+            </td>
+            <td>Parchear <code>10-t2_161_speakers.conf</code> según los descriptores RDF/Turtle reportados por <code>lv2info</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="gtk-terminal">
+        <div class="gtk-headerbar">
+          <span class="gtk-title">journalctl --user -u pipewire (errores antes del parche)</span>
+          <div class="gtk-win-btns" aria-hidden="true"><span>_</span><span>□</span><span>×</span></div>
+        </div>
+        <pre><code><span class="err">mod.filter-chain: can't load plugin type 'lv2': No existe el archivo o el directorio</span>
+<span class="err">mod.filter-chain: can't load graph: No existe el archivo o el directorio</span>
+<span class="err">pw.conf: could not load mandatory module "libpipewire-module-filter-chain": No existe el archivo o el directorio</span>
+
+<span class="comment"># Tras habilitar LV2 en PipeWire 1.0.7 sin corregir los puertos de Calf 0.90.3 y LSP 1.2.14:</span>
+<span class="warn">mod.filter-chain: control 'meter_in' can not be set: No existe el archivo o el directorio</span>
+<span class="warn">mod.filter-chain: control 'meter_out' can not be set: No existe el archivo o el directorio</span>
+<span class="warn">mod.filter-chain: control 'clip_in' can not be set: No existe el archivo o el directorio</span>
+<span class="warn">mod.filter-chain: control 'clip_out' can not be set: No existe el archivo o el directorio</span>
+<span class="warn">mod.filter-chain: control 'bypass' can not be set: No existe el archivo o el directorio</span>
+<span class="warn">mod.filter-chain: control 'cbe_0' can not be set: No existe el archivo o el directorio</span></code></pre>
+      </div>
+
+      <!-- 3. DSP TOPOLOGY -->
+      <h2 id="topology">3. DSP TOPOLOGY &amp; 6-CHANNEL ROUTING</h2>
+
+      <div data-i18n="es">
+        <p>
+          El controlador Apple T2 expone 6 canales PCM de salida mediante el perfil ALSA <code>apple-t2x6.conf</code>. El grafo procesa la entrada estéreo a 48 kHz y divide la señal hacia los 4 filtros FIR de convolución específicos del modelo <code>MacBookPro16,1</code>:
+        </p>
+      </div>
+      <div data-i18n="en">
+        <p>
+          The Apple T2 audio controller exposes a 6-channel PCM playback interface via <code>apple-t2x6.conf</code>. The PipeWire filter graph processes stereo input at 48 kHz and feeds 4 builtin FIR convolvers loaded with the impulse responses extracted from macOS (<code>Mac-E1008331FDC96864</code>):
+        </p>
+      </div>
+
+      <div class="gtk-terminal">
+        <div class="gtk-headerbar">
+          <span class="gtk-title">Signal Flow — effect_input.filter-chain-speakers &rarr; alsa_output.pci-0000_04_00.3.Speakers</span>
+          <div class="gtk-win-btns" aria-hidden="true"><span>_</span><span>□</span><span>×</span></div>
+        </div>
+        <pre><code>[ Input Sink: FL / FR (2ch, 48kHz, priority.session = 1500) ]
+       │
+       ▼
+[ LV2: Calf BassEnhancer (http://calf.sourceforge.net/plugins/BassEnhancer) ]
+  freq = 120 Hz | drive = 8.5 | blend = -10.0 | floor = 40 Hz | amount = 0.9
+       │
+       ▼
+[ LV2: LSP Multiband Compressor Stereo x8 (http://lsp-plug.in/plugins/lv2/mb_compressor_stereo) ]
+  enabled = 1 | mode = 1 | Bands: B0 (&lt;100Hz), B1 (100-500Hz), B2 (500-3000Hz), B7 (&gt;3000Hz)
+       │
+       ▼
+[ LADSPA: fastLookaheadLimiter (fast_lookahead_limiter_1913) ]
+  Input gain = 0 dB | Limit = -1.0 dB | Release = 0.8 s
+       │
+       ├──────────────────────────────┐
+       ▼ (Output 1: Left)             ▼ (Output 2: Right)
+  ┌────┴────┐                    ┌────┴────┐
+  ▼         ▼                    ▼         ▼
+[convLW]  [convLT]             [convRW]  [convRT]    &lt;-- 4x Builtin FIR Convolvers (44.1/48/96kHz)
+  │         │                    │         │
+  ├─► LW    │                    ├─► RW    │
+  └─► LW2   │                    └─► RW2   │
+  │   │     │                    │   │     │
+  ▼   ▼     ▼                    ▼   ▼     ▼
+AUX0 AUX1  AUX2                 AUX3 AUX4  AUX5
+(FL) (SL)  (RL)                 (FR) (SR)  (RR)
+LW1  LW2   Left Tweeter         RW1  RW2   Right Tweeter</code></pre>
+      </div>
+
+      <!-- 4. CONFIG PATCH (DIFF) -->
+      <h2 id="patch">4. CONFIGURATION PATCH (DIFF)</h2>
+      <div class="gtk-terminal">
+        <div class="gtk-headerbar">
+          <span class="gtk-title">diff -u 10-t2_161_speakers.conf.orig config/pipewire/10-t2_161_speakers.conf</span>
+          <div class="gtk-controls">
+            <button class="btn-copy" onclick="copyText('code-diff', this)">Copy</button>
+            <div class="gtk-win-btns" aria-hidden="true"><span>_</span><span>□</span><span>×</span></div>
+          </div>
+        </div>
+        <pre id="code-diff"><code>--- a/10-t2_161_speakers.conf
++++ b/10-t2_161_speakers.conf
+@@ -21,10 +21,10 @@
+                         level_in = 1.0
+                         level_out = 1.0
+                         amount = 0.9
+<span class="del">-                        meter_in = 0</span>
+<span class="del">-                        meter_out = 0</span>
+<span class="del">-                        clip_in = 0</span>
+<span class="del">-                        clip_out = 0</span>
+<span class="add">+                        #meter_in = 0</span>
+<span class="add">+                        #meter_out = 0</span>
+<span class="add">+                        #clip_in = 0</span>
+<span class="add">+                        #clip_out = 0</span>
+                         drive = 8.5
+                         blend = -10.0
+                         freq = 120
+@@ -40,7 +40,7 @@
+                         control = {
+                             # Enable
+                             mode = 1
+<span class="del">-                            bypass = 0</span>
+<span class="add">+                            enabled = 1</span>
+ 
+                             # Preamp volumes
+                             g_in = 1.0
+@@ -56,7 +56,7 @@
+                             ofe_r = 0
+ 
+                             # Band 0
+<span class="del">-                            cbe_0 = 1</span>
+<span class="add">+                            #cbe_0 = 1</span>
+                             ce_0 = 1
+                             al_0 = 0.501187 #-5 db
+                             at_0 = 0.0
+@@ -231,6 +231,7 @@
+                 media.class = Audio/Sink
+                 audio.channels = 2
+                 audio.position = [ FL FR ]
+<span class="add">+                priority.session = 1500</span>
+             }</code></pre>
+      </div>
+
+      <!-- 5. INSTALLATION -->
+      <h2 id="install">5. INSTALLATION / INSTALACIÓN MANUAL O AUTOMÁTICA</h2>
+
+      <div data-i18n="es">
+        <p>
+          El script <code>./install.sh</code> automatiza todos los pasos. Si prefieres ejecutar el proceso manualmente paso a paso en terminal:
+        </p>
+      </div>
+      <div data-i18n="en">
+        <p>
+          Running <code>./install.sh</code> performs all steps automatically. For manual step-by-step installation:
+        </p>
+      </div>
+
+      <div class="gtk-terminal">
+        <div class="gtk-headerbar">
+          <span class="gtk-title">bash — Manual Installation Steps</span>
+          <div class="gtk-controls">
+            <button class="btn-copy" onclick="copyText('code-manual', this)">Copy</button>
+            <div class="gtk-win-btns" aria-hidden="true"><span>_</span><span>□</span><span>×</span></div>
+          </div>
+        </div>
+        <pre id="code-manual"><code><span class="comment"># 1. Instalar PipeWire 1.0.7 con soporte LV2 y plugins requeridos (Calf, LSP, SWH LADSPA)</span>
+<span class="prompt">$</span> sudo add-apt-repository -y ppa:pipewire-debian/pipewire-upstream
+<span class="prompt">$</span> sudo apt-get update
+<span class="prompt">$</span> sudo apt-get install -y pipewire libpipewire-0.3-modules pipewire-pulse pipewire-alsa \
+    libspa-0.2-modules wireplumber calf-plugins lsp-plugins-lv2 swh-plugins
+
+<span class="comment"># 2. Instalar respuestas FIR (16,1), perfil ALSA de 6 canales, mixer paths y regla udev</span>
+<span class="prompt">$</span> sudo mkdir -p /usr/share/pipewire/devices/apple /usr/share/alsa-card-profile/mixer/profile-sets /usr/share/alsa-card-profile/mixer/paths
+<span class="prompt">$</span> sudo cp fir/macbook_pro_t2_16_1_*.wav /usr/share/pipewire/devices/apple/
+<span class="prompt">$</span> sudo cp config/alsa-card-profile/apple-t2x6.conf /usr/share/alsa-card-profile/mixer/profile-sets/
+<span class="prompt">$</span> sudo cp config/alsa-card-profile/paths/t2-*.conf /usr/share/alsa-card-profile/mixer/paths/
+<span class="prompt">$</span> sudo cp config/udev/91-audio-custom.rules /lib/udev/rules.d/
+<span class="prompt">$</span> sudo udevadm control --reload-rules &amp;&amp; sudo udevadm trigger
+
+<span class="comment"># 3. Desactivar config antigua en /etc (si existe) e instalar el grafo corregido</span>
+<span class="prompt">$</span> sudo mv /etc/pipewire/pipewire.conf.d/10-t2_161_speakers.conf /etc/pipewire/pipewire.conf.d/10-t2_161_speakers.conf.disabled 2&gt;/dev/null || true
+<span class="prompt">$</span> mkdir -p ~/.config/pipewire/pipewire.conf.d
+<span class="prompt">$</span> cp config/pipewire/10-t2_161_speakers.conf ~/.config/pipewire/pipewire.conf.d/
+<span class="prompt">$</span> systemctl --user restart pipewire wireplumber pipewire-pulse</code></pre>
+      </div>
+
+      <div class="notice">
+        <strong data-i18n="es">Nota sobre el volumen de hardware:</strong>
+        <strong data-i18n="en">Hardware volume calibration note:</strong>
+        <span data-i18n="es">
+          El sink físico crudo (<code>Apple Audio Device Speakers</code>) debe permanecer al <strong>100 % (<code>1.00</code> / 0 dB)</strong> para que el compresor multibanda y el limitador LADSPA trabajen con su umbral real calibrado. El control de volumen diario se realiza sobre <code>MacBook Pro T2 DSP Speakers</code>.
+        </span>
+        <span data-i18n="en">
+          Keep the underlying hardware sink (<code>Apple Audio Device Speakers</code>) at <strong>100% (<code>1.00</code> / 0 dB)</strong> so the multiband compressor and LADSPA limiter operate at their calibrated thresholds. Control your listening volume via <code>MacBook Pro T2 DSP Speakers</code>.
+        </span>
+      </div>
+
+      <!-- 6. VERIFICATION -->
+      <h2 id="verification">6. VERIFICATION (WPCTL STATUS)</h2>
+      <div class="gtk-terminal">
+        <div class="gtk-headerbar">
+          <span class="gtk-title">wpctl status</span>
+          <div class="gtk-win-btns" aria-hidden="true"><span>_</span><span>□</span><span>×</span></div>
+        </div>
+        <pre><code>Audio
+ ├─ Devices:
+ │      50. Apple Audio Device                  [alsa]
+ │  
+ ├─ Sinks:
+ │  <span class="ok">*   39. MacBook Pro T2 DSP Speakers         [vol: 0.70]</span>
+ │      64. Apple Audio Device Speakers         [vol: 1.00]
+ │      65. Apple Audio Device Headphones       [vol: 1.00]
+ │  
+ └─ Streams:
+        40. effect_output.filter-chain-speakers                         
+             <span class="ok">53. output_AUX0     &gt; Speaker:playback_FL	[active]</span>
+             <span class="ok">54. output_AUX1     &gt; Speaker:playback_SL	[active]</span>
+             <span class="ok">55. output_AUX2     &gt; Speaker:playback_RL	[active]</span>
+             <span class="ok">56. output_AUX3     &gt; Speaker:playback_FR	[active]</span>
+             <span class="ok">57. output_AUX4     &gt; Speaker:playback_SR	[active]</span>
+             <span class="ok">58. output_AUX5     &gt; Speaker:playback_RR	[active]</span></code></pre>
+      </div>
+
+      <!-- 7. MAINTAINER -->
+      <h2 id="maintainer">7. AUTHOR &amp; MAINTAINER</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th style="width:180px;">Maintainer</th>
+            <td><strong>mylnzon58</strong> — <a href="mailto:mylnzon58@gmail.com">mylnzon58@gmail.com</a></td>
+          </tr>
+          <tr>
+            <th>GitHub Profile</th>
+            <td><a href="https://github.com/mylnzon58" target="_blank" rel="noopener">https://github.com/mylnzon58</a></td>
+          </tr>
+          <tr>
+            <th>Source Repository</th>
+            <td><a href="https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04" target="_blank" rel="noopener">https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04</a></td>
+          </tr>
+          <tr>
+            <th>Upstream Credits</th>
+            <td>FIR impulse response WAVs (<code>macbook_pro_t2_16_1_*.wav</code>) and base T2 topology by the <a href="https://t2linux.org" target="_blank" rel="noopener">T2 Linux Team</a> (MIT License).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <footer>
+        <span>PIPEWIRE-T2-161-DSP(5) — Ubuntu 24.04 LTS (Noble Numbat)</span>
+        <span>Maintained by <a href="https://github.com/mylnzon58" target="_blank" rel="noopener">@mylnzon58</a> (mylnzon58@gmail.com)</span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.body.setAttribute('data-lang', lang);
+      document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-both').classList.toggle('active', lang === 'both');
+    }
+
+    function copyText(id, btn) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var raw = el.innerText.replace(/^\$\s+/gm, '');
+      navigator.clipboard.writeText(raw).then(function () {
+        var prev = btn.innerText;
+        btn.innerText = 'Copied';
+        setTimeout(function () { btn.innerText = prev; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>

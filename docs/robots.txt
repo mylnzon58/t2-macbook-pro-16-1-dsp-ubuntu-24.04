@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mylnzon58.github.io/t2-macbook-pro-16-1-dsp-ubuntu-24.04/sitemap.xml
