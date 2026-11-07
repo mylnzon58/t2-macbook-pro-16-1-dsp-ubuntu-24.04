@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # MacBook Pro 16,1 (2019, A2141) 6-Channel Speaker DSP Installer for Ubuntu 24.04
-# Maintainer: mylnzon58 <mylnzon58@gmail.com>
+# Maintainer: Juan José Monzón (@mylnzon58) <mylnzon58@gmail.com>
 # License: MIT
 # ==============================================================================
 set -euo pipefail
@@ -21,7 +21,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 echo -e "${CYAN}==> [T2-DSP] MacBook Pro 16,1 (A2141) 6-Channel Speaker DSP Installer (Ubuntu 24.04 LTS)${NC}"
-echo -e "${CYAN}==> Maintained by @mylnzon58 (mylnzon58@gmail.com)${NC}\n"
+echo -e "${CYAN}==> Author: Juan José Monzón (@mylnzon58) <mylnzon58@gmail.com>${NC}\n"
 
 # 0. Verify Apple T2 Audio hardware (PCI 106b:1803)
 T2_PCI_RAW="$(lspci -D -d 106b:1803 2>/dev/null | awk '{print $1; exit}' || true)"
@@ -161,7 +161,7 @@ fi
 echo -e "\n${GREEN}==> SUCCESS! 6-Channel Apple T2 DSP Audio & Studio Mic active and verified.${NC}"
 echo -e "${CYAN}--------------------------------------------------------------------------------${NC}"
 echo -e " 💙 ${GREEN}Mensaje del autor / Author's note:${NC}"
-echo -e " Soy Juan Monzón (@mylnzon58), desarrollador independiente y padre de dos niños."
+echo -e " Soy Juan José Monzón (@mylnzon58), desarrollador independiente argentino y padre de una niña y un niño pequeño."
 echo -e " Intento vivir de lo que amo creando soluciones abiertas para la comunidad."
 echo -e ""
 echo -e " ⭐ Si este proyecto revivió el sonido y micrófono de tu Mac, déjame una estrellita en GitHub:"
