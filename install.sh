@@ -9,6 +9,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 USER_PW_DIR="${HOME}/.config/pipewire/pipewire.conf.d"
 TARGET_CONF="${USER_PW_DIR}/10-t2_161_speakers.conf"
+TARGET_MIC_CONF="${USER_PW_DIR}/11-t2_161_mic.conf"
 SYS_CONF="/etc/pipewire/pipewire.conf.d/10-t2_161_speakers.conf"
 LV2_MOD="/usr/lib/x86_64-linux-gnu/pipewire-0.3/libpipewire-module-filter-chain-lv2.so"
 LADSPA_LIM="/usr/lib/ladspa/fast_lookahead_limiter_1913.so"
@@ -119,7 +120,11 @@ cp -f "${REPO_DIR}/config/pipewire/10-t2_161_speakers.conf" "${TARGET_CONF}"
 if [[ "${T2_ALSA_TARGET}" != "alsa_output.pci-0000_04_00.3.Speakers" ]]; then
     sed -i "s|alsa_output.pci-0000_04_00.3.Speakers|${T2_ALSA_TARGET}|g" "${TARGET_CONF}"
 fi
-echo -e "${GREEN}[✓] Installed patched DSP graph to ${TARGET_CONF}${NC}"
+echo -e "${GREEN}[✓] Installed patched Speaker DSP graph to ${TARGET_CONF}${NC}"
+
+# Install Studio Microphone DSP filter chain
+cp -f "${REPO_DIR}/config/pipewire/11-t2_161_mic.conf" "${TARGET_MIC_CONF}"
+echo -e "${GREEN}[✓] Installed Studio Microphone DSP graph to ${TARGET_MIC_CONF}${NC}"
 
 # 6. Restart PipeWire & WirePlumber user services
 echo -e "${CYAN}==> Restarting PipeWire, WirePlumber, and PipeWire-Pulse...${NC}"
@@ -144,6 +149,13 @@ else
     rm -f "${TARGET_CONF}"
     systemctl --user restart pipewire wireplumber pipewire-pulse
     exit 1
+fi
+
+DSP_MIC_ID="$(wpctl status | awk '/MacBook Pro T2 Studio DSP Mic/ {for(i=1;i<=NF;i++) if($i ~ /^[0-9]+\.$/) {sub(/\./,"",$i); print $i; exit}}' || true)"
+if [[ -n "${DSP_MIC_ID}" ]]; then
+    wpctl set-default "${DSP_MIC_ID}"
+    wpctl set-volume "${DSP_MIC_ID}" 1.0
+    echo -e "${GREEN}[✓] Set 'MacBook Pro T2 Studio DSP Mic' (ID ${DSP_MIC_ID}) as Default Audio Source at 100% volume${NC}"
 fi
 
 echo -e "\n${GREEN}==> SUCCESS! 6-Channel Apple T2 DSP Audio is active and verified.${NC}"
