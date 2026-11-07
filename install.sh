@@ -158,5 +158,13 @@ if [[ -n "${DSP_MIC_ID}" ]]; then
     echo -e "${GREEN}[✓] Set 'MacBook Pro T2 Studio DSP Mic' (ID ${DSP_MIC_ID}) as Default Audio Source at 100% volume${NC}"
 fi
 
-echo -e "\n${GREEN}==> SUCCESS! 6-Channel Apple T2 DSP Audio is active and verified.${NC}"
-echo -e "${CYAN}==> Repository & Documentation: https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04${NC}"
+echo -e "\n${GREEN}==> SUCCESS! 6-Channel Apple T2 DSP Audio & Studio Mic active and verified.${NC}"
+echo -e "${CYAN}--------------------------------------------------------------------------------${NC}"
+echo -e " 💙 ${GREEN}Mensaje del autor / Author's note:${NC}"
+echo -e " Soy Juan Monzón (@mylnzon58), desarrollador independiente y padre de dos niños."
+echo -e " Intento vivir de lo que amo creando soluciones abiertas para la comunidad."
+echo -e ""
+echo -e " ⭐ Si este proyecto revivió el sonido y micrófono de tu Mac, déjame una estrellita en GitHub:"
+echo -e " 👉 ${CYAN}https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04${NC}"
+echo -e " ¡Muchas gracias por tu apoyo! / Thank you for your support!"
+echo -e "${CYAN}--------------------------------------------------------------------------------${NC}"
