@@ -7,6 +7,7 @@
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Juan_Monz%C3%B3n-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juan-m-97b85681/)
 [![Instagram](https://img.shields.io/badge/Instagram-%40juanjoclassic-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/juanjoclassic/)
 [![Invitame un Tecito](https://img.shields.io/badge/%E2%98%95_Donar_un_Tecito-tecito.app%2Fjuanjoclassic-FF813F?style=flat&logo=buy-me-a-coffee&logoColor=white)](https://tecito.app/juanjoclassic)
+[![Sponsor on Patreon](https://img.shields.io/badge/Patreon-Planes_para_Sponsors-FF424D?style=flat&logo=patreon&logoColor=white)](https://www.patreon.com/JuanjoClassic)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > **Author & Maintainer:** **[Juan Monzón (@mylnzon58)](https://www.linkedin.com/in/juan-m-97b85681/)** — *AI Product | Full Stack Developer | Digital Products & Growth* (Argentina)  
@@ -185,9 +186,11 @@ Si este proyecto te ayudó a recuperar el sonido original de tu MacBook Pro 16" 
 
 If this solution helped restore your MacBook Pro's 6-speaker audio on Linux and saved you hours of debugging, consider supporting my open-source work by donating a **Tecito**:
 
-👉 **[☕ Donar un Tecito en tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**
+👉 **[☕ Donar un Tecito en tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**  
+👉 **[🧡 Planes para Sponsors en patreon.com/JuanjoClassic](https://www.patreon.com/JuanjoClassic)** (Apoyo recurrente con planes de patrocinio mensual)
 
 [![Donar un Tecito](https://img.shields.io/badge/%E2%98%95_Donar_un_Tecito-https%3A%2F%2Ftecito.app%2Fjuanjoclassic-FF813F?style=for-the-badge&logoColor=white)](https://tecito.app/juanjoclassic)
+[![Patreon Sponsors](https://img.shields.io/badge/Patreon-Planes_para_Sponsors-FF424D?style=for-the-badge&logo=patreon&logoColor=white)](https://www.patreon.com/JuanjoClassic)
 
 ---
 
@@ -200,6 +203,7 @@ If this solution helped restore your MacBook Pro's 6-speaker audio on Linux and 
   - 🔗 **LinkedIn:** [linkedin.com/in/juan-m-97b85681](https://www.linkedin.com/in/juan-m-97b85681/)
   - 📸 **Instagram:** [@juanjoclassic](https://www.instagram.com/juanjoclassic/)
   - ☕ **Donar un Tecito:** [tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)
+  - 🧡 **Planes para Sponsors (Patreon):** [patreon.com/JuanjoClassic](https://www.patreon.com/JuanjoClassic)
   - 💻 **GitHub:** [@mylnzon58](https://github.com/mylnzon58) (`mylnzon58@gmail.com`)
 - **Respuestas impulsionales FIR originales (`macbook_pro_t2_16_1_*.wav`) y topología base T2:**  
   Proyecto comunitario [T2 Linux](https://t2linux.org) / `lemmyg/t2-apple-audio-dsp` (Licencia MIT).
