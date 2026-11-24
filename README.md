@@ -193,8 +193,8 @@ If this solution helped restore your MacBook Pro's 6-speaker audio on Linux and 
 👉 **[☕ Donar un Tecito en tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**  
 👉 **[🧡 Planes para Sponsors en patreon.com/JuanjoClassic](https://www.patreon.com/JuanjoClassic)** (Apoyo recurrente con planes de patrocinio mensual)
 
-[![Donar un Tecito](assets/badges/donar-un-tecito-https-tecito-app-juanjocla-ftb-9a0a06.svg)](https://tecito.app/juanjoclassic)
-[![Patreon Sponsors](assets/badges/patreon-planes-para-sponsors-ff424d-ftb-151c63.svg)](https://www.patreon.com/JuanjoClassic)
+[![Donar un Tecito](assets/badges/tecito-donar-ftb.svg)](https://tecito.app/juanjoclassic)
+[![Patreon Sponsors](assets/badges/patreon-sponsors-ftb.svg)](https://www.patreon.com/JuanjoClassic)
 
 ---
 
