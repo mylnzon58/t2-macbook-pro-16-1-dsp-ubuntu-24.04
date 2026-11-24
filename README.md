@@ -1,14 +1,14 @@
 # MacBook Pro 16,1 (2019, A2141) 6-Channel Speaker DSP Fix for Ubuntu 24.04 LTS (PipeWire 1.0.7)
 
-[![Ubuntu 24.04 LTS](https://img.shields.io/badge/Ubuntu-24.04_LTS_(Noble)-E95420?logo=ubuntu&logoColor=white)](#)
-[![PipeWire 1.0.7](https://img.shields.io/badge/PipeWire-1.0.7_(LV2_Enabled)-00B4D8?logo=linux&logoColor=white)](#)
-[![Hardware](https://img.shields.io/badge/Apple_T2-MacBookPro16%2C1_(A2141)-111827?logo=apple&logoColor=white)](#)
-[![Author](https://img.shields.io/badge/Author-Juan_Monz%C3%B3n_(@mylnzon58)-10B981?logo=github&logoColor=white)](https://github.com/mylnzon58)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Juan_Monz%C3%B3n-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juan-m-97b85681/)
-[![Instagram](https://img.shields.io/badge/Instagram-%40juanjoclassic-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/juanjoclassic/)
-[![Invitame un Tecito](https://img.shields.io/badge/%E2%98%95_Donar_un_Tecito-tecito.app%2Fjuanjoclassic-FF813F?style=flat&logo=buy-me-a-coffee&logoColor=white)](https://tecito.app/juanjoclassic)
-[![Sponsor on Patreon](https://img.shields.io/badge/Patreon-Planes_para_Sponsors-FF424D?style=flat&logo=patreon&logoColor=white)](https://www.patreon.com/JuanjoClassic)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Ubuntu 24.04 LTS](assets/badges/ubuntu-24-04-lts-noble-e95420-badge-0eddb5.svg)](#)
+[![PipeWire 1.0.7](assets/badges/pipewire-1-0-7-lv2-enabled-00b4d8-badge-74abac.svg)](#)
+[![Hardware](assets/badges/apple-t2-macbookpro16-1-a2141-111827-badge-40b160.svg)](#)
+[![Author](assets/badges/author-juan-monz-n-mylnzon58-10b981-badge-b4c2f7.svg)](https://github.com/mylnzon58)
+[![LinkedIn](assets/badges/linkedin-juan-monz-n-0a66c2-badge-e9a39f.svg)](https://www.linkedin.com/in/juan-m-97b85681/)
+[![Instagram](assets/badges/instagram-juanjoclassic-e4405f-badge-cb0a18.svg)](https://www.instagram.com/juanjoclassic/)
+[![Invitame un Tecito](assets/badges/donar-un-tecito-tecito-app-juanjoclassic-f-badge-19a818.svg)](https://tecito.app/juanjoclassic)
+[![Sponsor on Patreon](assets/badges/patreon-planes-para-sponsors-ff424d-badge-d934e2.svg)](https://www.patreon.com/JuanjoClassic)
+[![License: MIT](assets/badges/license-mit-blue-svg-badge-fd4321.svg)](LICENSE)
 
 > **Author & Maintainer:** **[Juan Monzón (@mylnzon58)](https://www.linkedin.com/in/juan-m-97b85681/)** — *AI Product | Full Stack Developer | Digital Products & Growth* (Argentina)  
 > ☕ **¿Te sirvió esta solución?** Si este parche te ahorró horas de debugging y devolvió a la vida los 6 parlantes de tu MacBook Pro en Ubuntu 24.04, puedes agradecer o apoyar estas soluciones invitándome un Tecito en **[tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**, dejando una **Star ⭐** en el repo y siguiéndome en **[GitHub](https://github.com/mylnzon58)**, **[LinkedIn](https://www.linkedin.com/in/juan-m-97b85681/)** e **[Instagram (@juanjoclassic)](https://www.instagram.com/juanjoclassic/)**.  
@@ -16,13 +16,13 @@
 
 <p align="left">
   <a href="https://tecito.app/juanjoclassic" target="_blank">
-    <img src="https://img.shields.io/badge/%E2%98%95_Invitame_un_Tecito_/_Donate-tecito.app%2Fjuanjoclassic-FF813F?style=for-the-badge&logoColor=white" alt="Donar un Tecito - tecito.app/juanjoclassic" />
+    <img src="assets/badges/invitame-un-tecito-donate-tecito-app-juanj-ftb-9ce508.svg" alt="Donar un Tecito - tecito.app/juanjoclassic" />
   </a>
   <a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank">
-    <img src="https://img.shields.io/badge/LinkedIn-Juan_Monz%C3%B3n-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn - Juan Monzón" />
+    <img src="assets/badges/linkedin-juan-monz-n-0a66c2-ftb-1915bf.svg" alt="LinkedIn - Juan Monzón" />
   </a>
   <a href="https://www.instagram.com/juanjoclassic/" target="_blank">
-    <img src="https://img.shields.io/badge/Instagram-%40juanjoclassic-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram - @juanjoclassic" />
+    <img src="assets/badges/instagram-juanjoclassic-e4405f-ftb-dab03a.svg" alt="Instagram - @juanjoclassic" />
   </a>
 </p>
 
@@ -189,8 +189,8 @@ If this solution helped restore your MacBook Pro's 6-speaker audio on Linux and 
 👉 **[☕ Donar un Tecito en tecito.app/juanjoclassic](https://tecito.app/juanjoclassic)**  
 👉 **[🧡 Planes para Sponsors en patreon.com/JuanjoClassic](https://www.patreon.com/JuanjoClassic)** (Apoyo recurrente con planes de patrocinio mensual)
 
-[![Donar un Tecito](https://img.shields.io/badge/%E2%98%95_Donar_un_Tecito-https%3A%2F%2Ftecito.app%2Fjuanjoclassic-FF813F?style=for-the-badge&logoColor=white)](https://tecito.app/juanjoclassic)
-[![Patreon Sponsors](https://img.shields.io/badge/Patreon-Planes_para_Sponsors-FF424D?style=for-the-badge&logo=patreon&logoColor=white)](https://www.patreon.com/JuanjoClassic)
+[![Donar un Tecito](assets/badges/donar-un-tecito-https-tecito-app-juanjocla-ftb-9a0a06.svg)](https://tecito.app/juanjoclassic)
+[![Patreon Sponsors](assets/badges/patreon-planes-para-sponsors-ff424d-ftb-151c63.svg)](https://www.patreon.com/JuanjoClassic)
 
 ---
 
