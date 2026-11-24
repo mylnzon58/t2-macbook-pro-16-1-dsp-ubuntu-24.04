@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>T2-DSP(5) — MacBookPro16,1 (A2141) PipeWire 1.0.7 Audio DSP on Ubuntu 24.04 LTS</title>
   <meta name="description" content="Documentación técnica y parche de PipeWire 1.0.7 (libpipewire-module-filter-chain) para el sistema de 6 altavoces del MacBook Pro 16,1 (2019, A2141) con chip Apple T2 en Ubuntu 24.04 LTS. Por mylnzon58 (mylnzon58@gmail.com)." />
   <meta name="keywords" content="MacBookPro16,1 Ubuntu 24.04 audio fix, MacBook Pro 16 2019 A2141 speakers Linux DSP, t2-apple-audio-dsp Ubuntu 24.04, mod.filter-chain can't load plugin type lv2, libspa-filter-graph-plugin-lv2.so Ubuntu 24.04, libpipewire-module-filter-chain-lv2.so, mod.filter-chain control bypass can not be set, mod.filter-chain control cbe_0 can not be set, reparar parlantes MacBook Pro 16 2019 Ubuntu 24.04, Apple T2 6 channel speakers PipeWire 1.0.7, mylnzon58" />
   <meta name="author" content="mylnzon58 (mylnzon58@gmail.com)" />
   <meta name="robots" content="index, follow" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23007AFF'/%3E%3Cpath d='M9 12h4l5-4v16l-5-4H9v-8zm12 1a5 5 0 0 1 0 6' stroke='%23FFFFFF' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="MacBookPro16,1 (A2141) PipeWire 1.0.7 Speaker DSP — Ubuntu 24.04 LTS" />
   <meta property="og:description" content="Root cause analysis and PipeWire 1.0.7 LV2 filter-chain configuration for 2019 16-inch MacBook Pro (MacBookPro16,1) 6-channel speakers on Ubuntu 24.04 LTS." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <script type="application/ld+json">
   {
@@ -64,71 +61,81 @@
   </script>
 
   <style>
-    /* Ubuntu Vanilla Framework + GNOME Libadwaita Dark Technical Style */
     :root {
-      --bg-window: #161616;
-      --bg-panel: #1e1e1e;
-      --bg-headerbar: #262626;
-      --bg-code: #111111;
-      --border: #303030;
-      --border-subtle: #252525;
-      --text-main: #e0e0e0;
-      --text-muted: #9a9a9a;
-      --text-dim: #6e6e6e;
-      --ubuntu-orange: #e95420;
-      --link-blue: #62a0ea;
-      --ansi-green: #8ff0a4;
-      --ansi-red: #f66151;
-      --ansi-yellow: #f9f06b;
-      --font-ui: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Liberation Sans', sans-serif;
-      --font-mono: 'Ubuntu Mono', 'Liberation Mono', monospace;
+      --bg-window: #F5F5F7;
+      --bg-panel: #FFFFFF;
+      --bg-headerbar: rgba(245, 245, 247, 0.88);
+      --bg-code: #F1F1F4;
+      --track: #E5E5EA;
+      --border: #E5E5EA;
+      --border-subtle: #E5E5EA;
+      --text-main: #1D1D1F;
+      --text-muted: #6E6E73;
+      --text-dim: #6E6E73;
+      --ubuntu-orange: #007AFF;
+      --accent-ink: #FFFFFF;
+      --link-blue: #007AFF;
+      --ansi-green: #248A3D;
+      --ansi-red: #D70015;
+      --ansi-yellow: #9A6700;
+      --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    html[data-theme="dark"] {
+      --bg-window: #000000;
+      --bg-panel: #1C1C1E;
+      --bg-headerbar: rgba(0, 0, 0, 0.88);
+      --bg-code: #121214;
+      --track: #2C2C2E;
+      --border: #2C2C2E;
+      --border-subtle: #2C2C2E;
+      --text-main: #F5F5F7;
+      --text-muted: #98989D;
+      --text-dim: #98989D;
+      --ubuntu-orange: #0A84FF;
+      --accent-ink: #FFFFFF;
+      --link-blue: #0A84FF;
+      --ansi-green: #30D158;
+      --ansi-red: #FF453A;
+      --ansi-yellow: #FFD60A;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       background-color: var(--bg-window);
       color: var(--text-main);
       font-family: var(--font-ui);
-      font-size: 15px;
-      line-height: 1.6;
-      border-top: 3px solid var(--ubuntu-orange);
+      font-size: 15.5px;
+      line-height: 1.62;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
     }
+    a { color: var(--link-blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-    a {
-      color: var(--link-blue);
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* GTK / Vanilla Top Headerbar */
     .top-bar {
       background-color: var(--bg-headerbar);
+      backdrop-filter: saturate(160%) blur(16px);
+      -webkit-backdrop-filter: saturate(160%) blur(16px);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 50;
+      padding-top: env(safe-area-inset-top, 0px);
     }
     .top-bar-inner {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 0 20px;
-      height: 46px;
+      padding: 8px 20px;
+      min-height: 54px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      font-family: var(--font-mono);
+      gap: 12px;
+      flex-wrap: wrap;
       font-size: 13.5px;
     }
     .breadcrumb {
@@ -136,282 +143,191 @@
       align-items: center;
       gap: 8px;
       color: var(--text-muted);
+      font-family: var(--font-mono);
       overflow: hidden;
       white-space: nowrap;
     }
-    .breadcrumb strong {
-      color: var(--text-main);
-      font-weight: 700;
-    }
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
+    .breadcrumb strong { color: var(--text-main); font-weight: 700; }
+    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
     .lang-toggle {
       display: inline-flex;
-      border: 1px solid var(--border);
-      background: var(--bg-window);
+      background: var(--track);
+      padding: 3px;
+      border-radius: 10px;
     }
     .lang-toggle button {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-family: var(--font-mono);
+      font-family: var(--font-sans);
       font-size: 12.5px;
-      padding: 3px 9px;
+      font-weight: 600;
+      min-height: 34px;
+      padding: 4px 10px;
+      border-radius: 7px;
       cursor: pointer;
+      white-space: nowrap;
     }
-    .lang-toggle button.active {
-      background: var(--bg-headerbar);
-      color: var(--text-main);
-      font-weight: 700;
-    }
-    .gh-link {
+    .lang-toggle button.active { background: var(--bg-panel); color: var(--text-main); }
+
+    .gh-link, .theme-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       color: var(--text-main);
-      background: var(--bg-window);
+      background: var(--bg-panel);
       border: 1px solid var(--border);
-      padding: 3px 10px;
-      font-size: 12.5px;
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
     }
-    .gh-link:hover {
-      border-color: var(--text-muted);
-      text-decoration: none;
-    }
+    .gh-link:hover, .theme-btn:hover { text-decoration: none; opacity: 0.88; }
+
     .tecito-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #ffffff;
+      color: var(--accent-ink);
       background: var(--ubuntu-orange);
-      border: 1px solid #ff7a47;
-      padding: 3px 11px;
-      font-family: var(--font-mono);
-      font-size: 12.5px;
-      font-weight: 700;
-      transition: filter 0.15s ease;
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
     }
-    .tecito-btn:hover {
-      filter: brightness(1.12);
-      text-decoration: none;
-    }
+    .tecito-btn:hover { text-decoration: none; opacity: 0.9; }
+
     .support-card {
-      background: linear-gradient(180deg, #231c19 0%, var(--bg-panel) 100%);
-      border: 1px solid #5a3222;
-      border-left: 4px solid var(--ubuntu-orange);
-      padding: 18px 20px;
-      margin: 22px 0;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin: 24px 0;
     }
-    .support-card h3 {
-      margin-top: 0;
-      color: #ffffff;
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
+    .support-card h3 { margin-top: 0; color: var(--text-main); font-size: 18px; margin-bottom: 8px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
     .btn-cta {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      font-family: var(--font-mono);
-      font-size: 13.5px;
-      font-weight: 700;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
       border: 1px solid var(--border);
-      color: #ffffff;
-      background: var(--bg-headerbar);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      background: var(--bg-panel);
+      white-space: nowrap;
     }
-    .btn-cta:hover {
-      text-decoration: none;
-      border-color: var(--text-muted);
-    }
-    .btn-cta.primary {
-      background: var(--ubuntu-orange);
-      border-color: #ff7a47;
-      color: #ffffff;
-    }
-    .btn-cta.primary:hover {
-      filter: brightness(1.12);
-    }
-    .btn-cta.linkedin {
-      background: #0a66c2;
-      border-color: #2b82d9;
-    }
-    .btn-cta.instagram {
-      background: #c13584;
-      border-color: #e1306c;
-    }
+    .btn-cta:hover { text-decoration: none; opacity: 0.9; }
+    .btn-cta.primary { background: var(--ubuntu-orange); border-color: transparent; color: var(--accent-ink); }
 
-    /* Main 2-Column Documentation Layout */
     .layout {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 28px 20px 64px;
+      padding: 32px 20px 48px;
       display: grid;
-      grid-template-columns: 230px minmax(0, 1fr);
+      grid-template-columns: 240px minmax(0, 1fr);
       gap: 36px;
       align-items: start;
     }
-
     @media (max-width: 860px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        position: static !important;
-        border-right: none !important;
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 16px !important;
-      }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static !important; border-right: none !important; border-bottom: 1px solid var(--border); padding-bottom: 16px !important; }
     }
 
-    /* Left Sidebar (Manpage / Docs Navigation) */
     .sidebar {
       position: sticky;
-      top: 70px;
+      top: 72px;
       border-right: 1px solid var(--border);
       padding-right: 18px;
-      font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 13.5px;
     }
     .sidebar-title {
       color: var(--text-muted);
       font-size: 11.5px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 10px;
       padding-bottom: 6px;
-      border-bottom: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border);
     }
-    .toc-list {
-      list-style: none;
-      margin-bottom: 24px;
-    }
-    .toc-list li {
-      margin-bottom: 6px;
-    }
-    .toc-list a {
-      color: var(--text-muted);
-      display: block;
-      padding: 2px 0;
-    }
-    .toc-list a:hover {
-      color: var(--text-main);
-      text-decoration: none;
-    }
+    .toc-list { list-style: none; margin-bottom: 24px; }
+    .toc-list li { margin-bottom: 6px; }
+    .toc-list a { color: var(--text-muted); display: block; padding: 3px 0; font-family: var(--font-mono); font-size: 12.5px; }
+    .toc-list a:hover { color: var(--text-main); text-decoration: none; }
+
     .meta-box {
       background: var(--bg-panel);
       border: 1px solid var(--border);
-      padding: 12px;
+      border-radius: 16px;
+      padding: 16px;
       font-size: 12.5px;
       line-height: 1.5;
     }
-    .meta-box dt {
-      color: var(--text-dim);
-      text-transform: uppercase;
-      font-size: 11px;
-      margin-top: 8px;
-    }
-    .meta-box dt:first-child {
-      margin-top: 0;
-    }
-    .meta-box dd {
-      color: var(--text-main);
-      word-break: break-word;
-    }
+    .meta-box dt { color: var(--text-muted); text-transform: uppercase; font-size: 11px; font-weight: 600; margin-top: 10px; }
+    .meta-box dt:first-child { margin-top: 0; }
+    .meta-box dd { color: var(--text-main); word-break: break-word; }
 
-    /* Document Content Column */
-    .doc-main {
-      min-width: 0;
-    }
-
-    /* Manpage Header Banner */
+    .doc-main { min-width: 0; }
     .man-header {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--text-muted);
       border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
+      padding-bottom: 10px;
       margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 8px;
     }
-
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #ffffff;
-      line-height: 1.3;
-    }
-
-    .lead {
-      color: var(--text-muted);
-      margin-bottom: 22px;
-      font-size: 15px;
-    }
-
+    h1 { font-size: clamp(26px, 3.2vw, 34px); font-weight: 700; margin-bottom: 12px; color: var(--text-main); line-height: 1.18; letter-spacing: -0.02em; }
+    .lead { color: var(--text-muted); margin-bottom: 24px; font-size: 16.5px; }
     h2 {
       font-family: var(--font-mono);
       font-size: 15px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: #ffffff;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
-      margin: 34px 0 14px;
-    }
-
-    h3 {
-      font-size: 15px;
-      font-weight: 700;
       color: var(--text-main);
-      margin: 18px 0 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin: 36px 0 14px;
     }
-
-    p {
-      margin-bottom: 12px;
-    }
-
-    ul, ol {
-      margin: 0 0 14px 22px;
-    }
-    li {
-      margin-bottom: 6px;
-    }
-
+    h3 { font-size: 16px; font-weight: 600; color: var(--text-main); margin: 18px 0 8px; }
+    p { margin-bottom: 12px; }
+    ul, ol { margin: 0 0 14px 22px; }
+    li { margin-bottom: 6px; }
     code {
       font-family: var(--font-mono);
-      font-size: 13.5px;
-      background-color: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      padding: 1px 5px;
-      color: #d8d8d8;
+      font-size: 13px;
+      background-color: var(--track);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: var(--text-main);
     }
 
-    /* GTK / GNOME Terminal Frame */
     .gtk-terminal {
       border: 1px solid var(--border);
       background-color: var(--bg-code);
+      border-radius: 16px;
+      overflow: hidden;
       margin: 14px 0 20px;
     }
     .gtk-headerbar {
-      background-color: var(--bg-headerbar);
+      background-color: var(--bg-panel);
       border-bottom: 1px solid var(--border);
-      height: 32px;
-      padding: 0 10px;
+      min-height: 40px;
+      padding: 0 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -419,110 +335,75 @@
       font-size: 12px;
       color: var(--text-muted);
     }
-    .gtk-title {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .gtk-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .gtk-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gtk-controls { display: flex; align-items: center; gap: 8px; }
     .btn-copy {
       background: var(--bg-window);
       border: 1px solid var(--border);
+      border-radius: 999px;
       color: var(--text-main);
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      padding: 2px 8px;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
       cursor: pointer;
     }
-    .btn-copy:hover {
-      background: var(--border);
-    }
-    .gtk-win-btns {
-      display: inline-flex;
-      gap: 5px;
-      color: var(--text-dim);
-      font-size: 12px;
-      user-select: none;
-    }
-    .gtk-win-btns span {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 16px;
-      height: 16px;
-      background: #323232;
-      border-radius: 50%;
-      line-height: 1;
-    }
+    .gtk-win-btns { display: none; }
 
     pre {
-      padding: 14px;
+      padding: 16px;
       overflow-x: auto;
       font-family: var(--font-mono);
-      font-size: 13.5px;
-      line-height: 1.5;
-      color: #d4d4d4;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-main);
     }
-    pre code {
-      background: none;
-      border: none;
-      padding: 0;
-      color: inherit;
-    }
+    pre code { background: none; border: none; padding: 0; color: inherit; }
 
-    .prompt { color: var(--ansi-green); user-select: none; }
+    .prompt { color: var(--link-blue); user-select: none; }
     .err { color: var(--ansi-red); }
-    .ok { color: var(--ansi-green); }
+    .ok { color: var(--ansi-green); font-weight: 600; }
     .warn { color: var(--ansi-yellow); }
     .del { color: var(--ansi-red); }
     .add { color: var(--ansi-green); }
-    .comment { color: var(--text-dim); }
+    .comment { color: var(--text-muted); }
 
-    /* Technical Tables */
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 14px 0 20px;
-      font-size: 13.5px;
+      font-size: 14px;
       background: var(--bg-panel);
       border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
     }
-    th, td {
-      border: 1px solid var(--border);
-      padding: 8px 12px;
-      text-align: left;
-      vertical-align: top;
-    }
+    th, td { border-bottom: 1px solid var(--border); padding: 12px 14px; text-align: left; vertical-align: top; }
     th {
-      background: var(--bg-headerbar);
+      background: var(--track);
       font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
       font-weight: 700;
-      color: #ffffff;
-    }
-    td {
       color: var(--text-main);
     }
+    tr:last-child td { border-bottom: none; }
+    td { color: var(--text-main); }
 
-    /* Notice Box (Vanilla Framework style) */
     .notice {
       background: var(--bg-panel);
       border: 1px solid var(--border);
-      border-left: 3px solid var(--ubuntu-orange);
-      padding: 12px 16px;
+      border-radius: 14px;
+      padding: 14px 18px;
       margin: 16px 0;
-      font-size: 14px;
+      font-size: 14.5px;
     }
 
     footer {
       margin-top: 44px;
-      padding-top: 16px;
+      padding-top: 18px;
       border-top: 1px solid var(--border);
-      font-family: var(--font-mono);
-      font-size: 12.5px;
+      font-size: 13px;
       color: var(--text-muted);
       display: flex;
       justify-content: space-between;
@@ -551,8 +432,9 @@
           <button type="button" id="btn-en" onclick="setLang('en')">EN</button>
           <button type="button" id="btn-both" onclick="setLang('both')">ES/EN</button>
         </div>
+        <button type="button" id="btn-theme" class="theme-btn" onclick="toggleTheme()" title="Cambiar entre modo claro y oscuro OLED"><span id="theme-label">OLED Oscuro</span></button>
         <a class="tecito-btn" href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener" title="Invitame un Tecito / Donate">
-          <span>☕ Donar un Tecito</span>
+          <span>Donar un Tecito</span>
         </a>
         <a class="gh-link" href="https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04" target="_blank" rel="noopener">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
@@ -596,7 +478,7 @@
         </dd>
         <dt>Support / Donar</dt>
         <dd style="margin-top:4px;">
-          <a class="tecito-btn" style="width:100%;justify-content:center;" href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">☕ Invitame un Tecito</a>
+          <a class="tecito-btn" style="width:100%;justify-content:center;" href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">Invitame un Tecito</a>
         </dd>
         <dt>License</dt>
         <dd>MIT</dd>
@@ -895,29 +777,29 @@ LW1  LW2   Left Tweeter         RW1  RW2   Right Tweeter</code></pre>
 
       <div class="support-card">
         <div data-i18n="es">
-          <h3>☕ ¿Te sirvió esta solución? Invitame un Tecito</h3>
+          <h3>¿Te sirvió esta solución? Invitame un Tecito</h3>
           <p>
             Si este diagnóstico y parche de PipeWire + LV2 te ahorró horas de trabajo y devolvió a la vida los 6 parlantes de tu MacBook Pro 16" en Ubuntu 24.04, puedes apoyar estas soluciones open-source invitándome un <strong>Tecito</strong> o conectando conmigo en mis redes:
           </p>
         </div>
         <div data-i18n="en">
-          <h3>☕ Did this solution help you? Buy me a Tecito</h3>
+          <h3>Did this solution help you? Buy me a Tecito</h3>
           <p>
             If this PipeWire + LV2 root-cause analysis and patch saved you hours of debugging and brought your 16" MacBook Pro's 6 speakers back to life on Ubuntu 24.04, consider supporting my open-source solutions by donating a <strong>Tecito</strong> or connecting with me:
           </p>
         </div>
         <div class="cta-row">
           <a class="btn-cta primary" href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">
-            <span>☕ Donar un Tecito (tecito.app/juanjoclassic)</span>
+            <span>Donar un Tecito (tecito.app/juanjoclassic)</span>
           </a>
           <a class="btn-cta linkedin" href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">
             <span>in LinkedIn — Juan Monzón</span>
           </a>
           <a class="btn-cta instagram" href="https://www.instagram.com/juanjoclassic/" target="_blank" rel="noopener">
-            <span>📸 Instagram @juanjoclassic</span>
+            <span>Instagram @juanjoclassic</span>
           </a>
           <a class="btn-cta" href="https://github.com/mylnzon58/t2-macbook-pro-16-1-dsp-ubuntu-24.04" target="_blank" rel="noopener">
-            <span>⭐ Star on GitHub (@mylnzon58)</span>
+            <span>Star on GitHub (@mylnzon58)</span>
           </a>
         </div>
       </div>
@@ -929,12 +811,12 @@ LW1  LW2   Left Tweeter         RW1  RW2   Right Tweeter</code></pre>
             <td>
               <strong><a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">Juan Monzón</a></strong> (<code>@mylnzon58</code>)<br/>
               <em>AI Product | Full Stack Developer | Digital Products &amp; Growth</em><br/>
-              📍 Argentina
+              Argentina
             </td>
           </tr>
           <tr>
             <th>Support / Donaciones</th>
-            <td><a href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener"><strong>https://tecito.app/juanjoclassic</strong></a> (☕ Invitame un Tecito por las soluciones)</td>
+            <td><a href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener"><strong>https://tecito.app/juanjoclassic</strong></a> (Invitame un Tecito por las soluciones)</td>
           </tr>
           <tr>
             <th>LinkedIn</th>
@@ -961,12 +843,27 @@ LW1  LW2   Left Tweeter         RW1  RW2   Right Tweeter</code></pre>
 
       <footer>
         <span>PIPEWIRE-T2-161-DSP(5) — Ubuntu 24.04 LTS (Noble Numbat)</span>
-        <span>By <a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">Juan Monzón (@mylnzon58)</a> &middot; <a href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">☕ Donar un Tecito</a> &middot; <a href="https://www.instagram.com/juanjoclassic/" target="_blank" rel="noopener">IG @juanjoclassic</a></span>
+        <span>By <a href="https://www.linkedin.com/in/juan-m-97b85681/" target="_blank" rel="noopener">Juan Monzón (@mylnzon58)</a> &middot; <a href="https://tecito.app/juanjoclassic" target="_blank" rel="noopener">Donar un Tecito</a> &middot; <a href="https://www.instagram.com/juanjoclassic/" target="_blank" rel="noopener">IG @juanjoclassic</a></span>
       </footer>
     </main>
   </div>
 
   <script>
+    (function initTheme() {
+      if (localStorage.getItem('t2_dsp_theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-label').textContent = 'Modo Claro';
+      }
+    })();
+
+    function toggleTheme() {
+      var root = document.documentElement;
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('t2_dsp_theme', next);
+      document.getElementById('theme-label').textContent = next === 'dark' ? 'Modo Claro' : 'OLED Oscuro';
+    }
+
     function setLang(lang) {
       document.body.setAttribute('data-lang', lang);
       document.getElementById('btn-es').classList.toggle('active', lang === 'es');
